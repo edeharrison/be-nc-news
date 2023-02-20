@@ -5,12 +5,15 @@ app.use(express.json())
 
 const {
   testConnection,
-  getTopics
+  getTopics,
+  getArticles
 } = require("./controllers/controller.js")
 
 app.get("/api", testConnection)
 
 app.get("/api/topics", getTopics)
+
+app.get("/api/articles", getArticles)
 
 app.use(error500)
 
