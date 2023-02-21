@@ -14,8 +14,14 @@ afterAll(() => {
 
 describe("app", () => {
   describe("server errors", () => {
-    it("404 GET api/invalid-route responds with a 404 - Not found/ It could exist as it's the right format, but it doesn't)", () => {
-      return request(app).get("/api/invalidRoute").expect(404);
+    it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
+      return request(app)
+        .get("/api/arty-gulls")
+        .expect(404)
+        .then((body) => {
+          const message = body.body.message;
+          expect(message).toBe("Path not found");
+        });
     });
   });
   describe("/api", () => {
@@ -67,7 +73,6 @@ describe("app", () => {
         .expect(200)
         .then((body) => {
           const articles = body.body;
-          console.log(articles);
           articles.forEach((article) => {
             expect(article).toMatchObject({
               author: expect.any(String),
@@ -101,15 +106,5 @@ describe("app", () => {
           });
         });
     });
-    // it('400 GET api/?!?! responds with a 400 - Bad request / wrong format)', () => {
-    //     return request(app)
-    //     .get('/api/?!?!')
-    //     .expect(400)
-    // })
-    // it('408 GET api/articles responds with a 408 - Request timeout', () => {
-    //     return request(app)
-    //     .get('/api/articles')
-    //     .expect(408)
-    // })
   });
 });
