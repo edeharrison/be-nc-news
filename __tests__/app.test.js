@@ -13,6 +13,11 @@ afterAll(() => {
 });
 
 describe("app", () => {
+  describe("server errors", () => {
+    it("404 GET api/invalid-route responds with a 404 - Not found/ It could exist as it's the right format, but it doesn't)", () => {
+      return request(app).get("/api/invalidRoute").expect(404);
+    });
+  });
   describe("/api", () => {
     it('200 GET /api returns message, "all ok"', () => {
       return request(app)
@@ -62,7 +67,7 @@ describe("app", () => {
         .expect(200)
         .then((body) => {
           const articles = body.body;
-          console.log(articles)
+          console.log(articles);
           articles.forEach((article) => {
             expect(article).toMatchObject({
               author: expect.any(String),
@@ -72,7 +77,7 @@ describe("app", () => {
               created_at: expect.any(String),
               votes: expect.any(Number),
               article_img_url: expect.any(String),
-              comment_count: expect.any(Number)               
+              comment_count: expect.any(Number),
             });
             // START - Check ORDER BY created_at DESC
             const createdAtArray = () => {
@@ -96,11 +101,6 @@ describe("app", () => {
           });
         });
     });
-    // it('404 GET api/invalid-route responds with a 404 - Not found/ It could exist as it\'s the right format, but it doesn\'t)', () => {
-    //     return request(app)
-    //     .get('/api/invalidRoute')
-    //     .expect(404)
-    // })
     // it('400 GET api/?!?! responds with a 400 - Bad request / wrong format)', () => {
     //     return request(app)
     //     .get('/api/?!?!')
