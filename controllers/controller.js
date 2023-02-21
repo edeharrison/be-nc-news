@@ -23,3 +23,10 @@ exports.getArticles = (req, res, next) => {
         next(err)
     })
 }
+
+exports.getCommentsByArticleId = (req, res, next) => {
+    fetchCommentsById(article_id)
+    .then((comments) => {
+        res.status(200).send(comments)
+    })
+}

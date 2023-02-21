@@ -6,6 +6,7 @@ const {
   testConnection,
   getTopics,
   getArticles,
+  getCommentsByArticleId
 } = require("./controllers/controller.js");
 
 app.get("/api", testConnection);
@@ -13,6 +14,8 @@ app.get("/api", testConnection);
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles", getArticles);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
 app.use((req, res, next) => {
   res.status(404).send({ message: "Path not found" });

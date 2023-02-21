@@ -3,19 +3,19 @@ const db = require("../db/connection.js");
 exports.fetchTopics = () => {
   return db
     .query(
-    `
+      `
     SELECT * FROM topics;
     `
     )
     .then((result) => {
-      return result.rows
-    })
+      return result.rows;
+    });
 };
 
 exports.fetchArticles = () => {
   return db
     .query(
-    `
+      `
     SELECT 
       articles.author, 
       articles.title, 
@@ -34,7 +34,22 @@ exports.fetchArticles = () => {
     `
     )
     .then((result) => {
-      return result.rows
-    })
+      return result.rows;
+    });
 };
 
+exports.fetchCommentsById = (article_id) => {
+  console.log(article_id)
+  // const article_id = req.params
+  return db.query(
+    `
+    SELECT * FROM comments
+    WHERE article_id = 1
+    ;
+    `
+  )
+  .then((result) => {
+    console.log(result)
+    return result.rows
+  })
+};

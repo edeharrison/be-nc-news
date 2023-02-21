@@ -68,11 +68,46 @@ describe("app", () => {
               article_img_url: expect.any(String),
               comment_count: expect.any(Number),
             });
-            expect(articles).toBeSortedBy('created_at', {
-                descending: true
+            expect(articles).toBeSortedBy("created_at", {
+              descending: true,
             });
           });
         });
     });
   });
+  describe("GET /api/articles/:article_id/comments", () => {
+    // it("responds with an array", () => {
+    //   return request(app)
+    //     .get("/api/articles/:article_id/comments")
+    //     .expect(200)
+    //     .then(({ body }) => {
+    //       const comments = body;
+    //       expect(Array.isArray(comments)).toBe(true);
+    //       expect(comments.length).toBeGreaterThan(0);
+    //     });
+    // });
+    // it("responds with an array of comments for specific article_id, most recent comment first", () => {
+    //   return request(app)
+    //     .get("/api/articles/1/comments")
+    //     .expect(200)
+    //     .then(({ body }) => {
+    //       const comments = body;
+    //       expect(comments).toMatchObject({
+    //         comment_id: expect.any(Number),
+    //         votes: expect.any(Number),
+    //         created_at: expect.any(Number),
+    //         author: expect.any(String),
+    //         body: expect.any(String),
+    //         article_id: expect.any(Number),
+    //       });
+    //     });
+    // });
+  });
 });
+
+// comment_id
+// votes
+// created_at
+// author
+// body
+// article_id
