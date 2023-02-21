@@ -13,6 +13,17 @@ afterAll(() => {
 });
 
 describe("app", () => {
+  describe("server errors", () => {
+    it("404 GET /api/topics - a path that doesn't exist but is valid format", () => {
+      return request(app)
+        .get("/api/chopics")
+        .expect(404)
+        .then((body) => {
+          const message = body.body.message;
+          expect(message).toBe("Path not found");
+        });
+    });
+  });
   describe("/api", () => {
     it('200 GET /api returns message, "all ok"', () => {
       return request(app)

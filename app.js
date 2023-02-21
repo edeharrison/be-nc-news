@@ -12,6 +12,10 @@ app.get("/api", testConnection)
 
 app.get("/api/topics", getTopics)
 
+app.use((req, res, next) => {
+    res.status(404).send({ message: 'Path not found' })
+})
+
 app.use(error500)
 
 module.exports = app
