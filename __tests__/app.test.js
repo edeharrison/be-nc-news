@@ -14,37 +14,62 @@ afterAll(() => {
 
 describe("app", () => {
   describe("server errors", () => {
-    it("404 GET /api/topics - a path that doesn't exist but is valid format", () => {
+    it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
       return request(app)
-        .get("/api/chopics")
+        .get("/api/arty-gulls")
         .expect(404)
-        .then(( {body} ) => {
+        .then(({ body }) => {
           const message = body.message;
           expect(message).toBe("Path not found");
         });
     });
   });
   describe("200 GET /api/topics", () => {
-    it("responds with an object", () => {
+    it("200 GET /api/topics - each object inside array has two properties - a slug, and a description", () => {
       return request(app)
         .get("/api/topics")
+        .expect(200)
+        .then(({ body }) => {
+          const topics = body;
+          topics.forEach((topic) => {
+            expect(topic).toMatchObject({
+              slug: expect.any(String),
+              description: expect.any(String),
+            });
+          });
+        });
+    });
+  });
+  describe("200 GET /api/articles", () => {
+    it("returns with an object", () => {
+      return request(app)
+        .get("/api/articles")
         .expect(200)
         .then((response) => {
           expect(typeof response.body).toEqual("object");
         });
     });
-    it("200 GET /api/topics - each object inside array has two properties - a slug, and a description", () => {
+    it("200 GET /api/articles - each object inside array has eight properties - author, title, article_id, topic, created_at, votes, article_img_url, comment_count. Ordered by desc date order", () => {
       return request(app)
-        .get("/api/topics")
+        .get("/api/articles")
         .expect(200)
-        .then(( {body} ) => {
-          const topics = body;
-          expect(topics.length).toBeGreaterThan(0)
-          expect(Array.isArray(topics)).toBe(true)
-          topics.forEach((topic) => {
-            expect(topic).toMatchObject({
-              slug: expect.any(String),
-              description: expect.any(String),
+        .then(({ body }) => {
+          const articles = body;
+          expect(articles.length).toBeGreaterThan(0);
+          expect(Array.isArray(articles)).toBe(true);
+          articles.forEach((article) => {
+            expect(article).toMatchObject({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number),
+            });
+            expect(articles).toBeSortedBy('created_at', {
+                descending: true
             });
           });
         });
