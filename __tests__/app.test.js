@@ -18,7 +18,7 @@ describe("app", () => {
       return request(app)
         .get("/api/arty-gulls")
         .expect(404)
-        .then(( {body} ) => {
+        .then(({ body }) => {
           const message = body.message;
           expect(message).toBe("Path not found");
         });
@@ -29,7 +29,7 @@ describe("app", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
-        .then(( {body} ) => {
+        .then(({ body }) => {
           const topics = body;
           topics.forEach((topic) => {
             expect(topic).toMatchObject({
@@ -53,10 +53,10 @@ describe("app", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
-        .then(( {body} ) => {
+        .then(({ body }) => {
           const articles = body;
-          expect(articles.length).toBeGreaterThan(0)
-          expect(Array.isArray(articles)).toBe(true)
+          expect(articles.length).toBeGreaterThan(0);
+          expect(Array.isArray(articles)).toBe(true);
           articles.forEach((article) => {
             expect(article).toMatchObject({
               author: expect.any(String),
@@ -68,25 +68,9 @@ describe("app", () => {
               article_img_url: expect.any(String),
               comment_count: expect.any(Number),
             });
-            // START - Check ORDER BY created_at DESC
-            const createdAtArray = () => {
-              return articles.map((article) => {
-                article = article.created_at;
-                article = article.replace("-", "");
-                article = article.slice(0, 6);
-                return Number(article);
-              });
-            };
-            const sortedCreatedAtArray = articles.map((article) => {
-              article = article.created_at;
-              article = article.replace("-", "");
-              article = article.slice(0, 6);
-              return Number(article);
+            expect(articles).toBeSortedBy('created_at', {
+                descending: true
             });
-            expect(sortedCreatedAtArray.sort((b, a) => a - b)).toEqual(
-              createdAtArray()
-            );
-            // END - Check ORDER BY created_at DESC
           });
         });
     });
