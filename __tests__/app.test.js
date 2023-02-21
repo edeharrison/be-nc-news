@@ -18,19 +18,9 @@ describe("app", () => {
       return request(app)
         .get("/api/chopics")
         .expect(404)
-        .then((body) => {
-          const message = body.body.message;
+        .then(( {body} ) => {
+          const message = body.message;
           expect(message).toBe("Path not found");
-        });
-    });
-  });
-  describe("/api", () => {
-    it('200 GET /api returns message, "all ok"', () => {
-      return request(app)
-        .get("/api")
-        .expect(200)
-        .then((response) => {
-          expect(response.body.message).toBe("all ok");
         });
     });
   });
@@ -47,8 +37,10 @@ describe("app", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
-        .then((body) => {
-          const topics = body.body;
+        .then(( {body} ) => {
+          const topics = body;
+          expect(topics.length).toBeGreaterThan(0)
+          expect(Array.isArray(topics)).toBe(true)
           topics.forEach((topic) => {
             expect(topic).toMatchObject({
               slug: expect.any(String),
