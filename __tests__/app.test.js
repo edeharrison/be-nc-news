@@ -20,18 +20,18 @@ describe("app", () => {
     //     .expect(404)
     //     .then(({ body }) => {
     //       const message = body.message;
-    //       expect(message).toBe("Path not found");
+    //       expect(message).toBe("no articles here");
     //     });
     // });
-    // it("404 GET /api/articles/:article_id/comments - a path that doesn't exist but is valid format", () => {
-    //   return request(app)
-    //   .get("/api/articles/100000/comments")
-    //   .expect(404)
-    //   .then(({ body }) => {
-    //     const message = body.message
-    //     expect(message).toBe("no article or associated comments here")
-    //   })
-    // })
+    it("404 GET /api/articles/:article_id/comments - a path that doesn't exist but is valid format", () => {
+      return request(app)
+      .get("/api/articles/100000/comments")
+      .expect(404)
+      .then(({ body }) => {
+        const message = body.message
+        expect(message).toBe("no article or associated comments here")
+      })
+    })
     it("400 GET /api/articles/:article_id/comments - bad request / wrong format endpoint", () => {
       return request(app)
       .get("/api/articles/word-not-number/comments")

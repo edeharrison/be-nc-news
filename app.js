@@ -21,8 +21,8 @@ app.all('/*', res => {
   res.status(404).send({ message: "Path not found" });
 });
 
-app.use(PSQLErrors)
 app.use(customErrors)
+app.use(PSQLErrors)
 app.use(error500);
 
 module.exports = app;

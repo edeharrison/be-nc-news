@@ -1,11 +1,10 @@
 exports.customErrors = (err, req, res, next) => {
     if (err === 'no article or associated comments here' ||
-        err === 'no article here') {
+        err === 'no articles here') {
         res.status(404).send({ message: err });
     } else {
-        res.status(404).send({ message: "Path not found" })
+        next(err)
     }
-    next(err)
 }
 
 exports.PSQLErrors = (err, req, res, next) => {
