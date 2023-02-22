@@ -1,5 +1,5 @@
 const express = require("express");
-const { error500, PSQLErrors, error404 } = require("./controllers/error-handling-controller.js");
+const { customErrors, error500, PSQLErrors } = require("./controllers/error-handling-controller.js");
 const app = express();
 
 const {
@@ -21,8 +21,8 @@ app.all('/*', res => {
   res.status(404).send({ message: "Path not found" });
 });
 
-app.use(error404)
 app.use(PSQLErrors)
+app.use(customErrors)
 app.use(error500);
 
 module.exports = app;

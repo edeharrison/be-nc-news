@@ -39,15 +39,41 @@ exports.fetchArticles = () => {
 };
 
 exports.fetchCommentsById = (article_id) => {
-  return db.query(
-    `
+  return db
+    .query(
+      `
     SELECT * FROM comments
     WHERE article_id = ${article_id}
     ;
     `
-  )
+    )
+    .then((result) => {
+      return result.rows;
+    });
+};
+
+
+// 6
+exports.fetchCommentsById = (article_id) => {
+  let queryString = 
+    `
+    SELECT comment_id, votes, created_at, author, body, article_id 
+    FROM comments
+    `
+  const queryParams = []
+
+  if (article_id !== undefined) {
+    queryString += ` WHERE article_id = $1 ORDER BY created_at DESC;`
+    queryParams.push(article_id)
+  }
+
+  return db.query(queryString, queryParams)
   .then((result) => {
-    console.log(result)
-    return result.rows
+    const comments = result.rows
+    if (result.rowCount === 0) {
+      return Promise.reject('no article or associated comments here')
+    }
+
+    return comments
   })
 };

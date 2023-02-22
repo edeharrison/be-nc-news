@@ -1,4 +1,4 @@
-const { fetchTopics, fetchArticles } = require("../models/models.js")
+const { fetchTopics, fetchArticles, fetchCommentsById } = require("../models/models.js")
 
 exports.testConnection = (req, res, next) => {
     res.status(200).send({ message: 'all ok' })
@@ -25,14 +25,12 @@ exports.getArticles = (req, res, next) => {
 }
 
 exports.getCommentsByArticleId = (req, res, next) => {
-    // const { article_id } = req.params
-    // fetchCommentsById(article_id)
-    // .then((comments) => {
-    //     res.status(200).send(comments)
-    // })
-    // .catch((err) => {
-    //     next(err)
-    // })
-
-    res.status(200).send([1])
+    const { article_id } = req.params
+    fetchCommentsById(article_id)
+    .then((comments) => {
+        res.status(200).send(comments)
+    })
+    .catch((err) => {
+        next(err)
+    })
 }
