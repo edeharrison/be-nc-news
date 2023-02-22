@@ -129,11 +129,4 @@ describe("app", () => {
   });
 });
 
-// author;
-// title;
-// article_id;
-// body;
-// topic;
-// created_at;
-// votes;
-// article_img_url;
+
