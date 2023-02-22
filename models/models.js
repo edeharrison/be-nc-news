@@ -39,12 +39,10 @@ exports.fetchArticles = () => {
 };
 
 exports.fetchCommentsById = (article_id) => {
-  console.log(article_id)
-  // const article_id = req.params
   return db.query(
     `
     SELECT * FROM comments
-    WHERE article_id = 1
+    WHERE article_id = ${article_id}
     ;
     `
   )
