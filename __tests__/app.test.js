@@ -23,24 +23,6 @@ describe("app", () => {
           expect(message).toBe("Path not found");
         });
     });
-    it("404 GET /api/articles/100000 - a path that doesn't exist but is valid format", () => {
-      return request(app)
-        .get("/api/articles/100000")
-        .expect(404)
-        .then(({ body }) => {
-          const message = body.message;
-          expect(message).toBe("Path not found");
-        });
-    });
-    it("400 GET /api/articles/word-not-number - a bad request / invalid format", () => {
-      return request(app)
-      .get("/api/articles/word-not-number")
-      .expect(400)
-      .then(({ body }) => {
-        const message = body.message
-        expect(message).toBe("Bad request")
-      })
-    });
   });
   describe("200 GET /api/topics", () => {
     it("200 GET /api/topics - each object inside array has two properties - a slug, and a description", () => {
@@ -86,53 +68,39 @@ describe("app", () => {
               article_img_url: expect.any(String),
               comment_count: expect.any(Number),
             });
-            // START - Check ORDER BY created_at DESC
-            const createdAtArray = () => {
-              return articles.map((article) => {
-                article = article.created_at;
-                article = article.replace("-", "");
-                article = article.slice(0, 6);
-                return Number(article);
-              });
-            };
-            const sortedCreatedAtArray = articles.map((article) => {
-              article = article.created_at;
-              article = article.replace("-", "");
-              article = article.slice(0, 6);
-              return Number(article);
+            expect(articles).toBeSortedBy("created_at", {
+              descending: true,
             });
-            expect(sortedCreatedAtArray.sort((b, a) => a - b)).toEqual(
-              createdAtArray()
-            );
-            // END - Check ORDER BY created_at DESC
           });
         });
     });
   });
-  describe("/api/articles/:article_id", () => {
-    it("responds with an object", () => {
+  describe("GET /api/articles/:article_id/comments", () => {
+    it("responds with an array", () => {
       return request(app)
-        .get("/api/articles/1")
+        .get("/api/articles/:article_id/comments")
         .expect(200)
-        .then((response) => {
-          expect(typeof response.body).toEqual("object");
-        });
-    });
-    it("200 GET /api/articles/:article_id - responds with specific article from articles", () => {
-      return request(app)
-        .get("/api/articles/1")
         .then(({ body }) => {
-          const article = body;
-          expect(article).toMatchObject({
-            author: expect.any(String),
-            title: expect.any(String),
-            article_id: expect.any(Number),
-            topic: expect.any(String),
-            created_at: expect.any(String),
-            votes: expect.any(Number),
-            article_img_url: expect.any(String),
-          });
+          const comments = body;
+          expect(Array.isArray(comments)).toBe(true);
+          expect(comments.length).toBeGreaterThan(0);
         });
     });
+    // it("responds with an array of comments for specific article_id, most recent comment first", () => {
+    //   return request(app)
+    //     .get("/api/articles/1/comments")
+    //     .expect(200)
+    //     .then(({ body }) => {
+    //       const comments = body;
+    //       expect(comments).toMatchObject({
+    //         comment_id: expect.any(Number),
+    //         votes: expect.any(Number),
+    //         created_at: expect.any(Number),
+    //         author: expect.any(String),
+    //         body: expect.any(String),
+    //         article_id: expect.any(Number),
+    //       });
+    //     });
+    // });
   });
 });

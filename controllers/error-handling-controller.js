@@ -1,9 +1,5 @@
-exports.customErrors = (err, req, res, next) => {
-    if(err === 'no article here') {
-        res.status(404).send({ message: "Path not found" });
-    } else {
-        next(err)
-    }
+exports.error404 = (err, req, res, next) => {
+    res.status(404).send({ message: "Path not found" });
 }
 
 exports.PSQLErrors = (err, req, res, next) => {
