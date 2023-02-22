@@ -49,7 +49,6 @@ exports.fetchArticleById = (article_id) => {
 
   return db.query(queryString, queryParams).then((result) => {
     const article = result.rows
-
     if (result.rowCount === 0) {
       return Promise.reject('no article here')
     }

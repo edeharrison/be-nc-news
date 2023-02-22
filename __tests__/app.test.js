@@ -18,8 +18,7 @@ describe("app", () => {
       return request(app)
         .get("/api/arty-gulls")
         .expect(404)
-        .then(( {body} ) => {
-          
+        .then(({ body }) => {
           const message = body.message;
           expect(message).toBe("Path not found");
         });
@@ -28,10 +27,19 @@ describe("app", () => {
       return request(app)
         .get("/api/articles/100000")
         .expect(404)
-        .then(( {body} ) => {
+        .then(({ body }) => {
           const message = body.message;
           expect(message).toBe("Path not found");
         });
+    });
+    it("400 GET /api/articles/word-not-number - a bad request / invalid format", () => {
+      return request(app)
+      .get("/api/articles/word-not-number")
+      .expect(400)
+      .then(({ body }) => {
+        const message = body.message
+        expect(message).toBe("Bad request")
+      })
     });
   });
   describe("200 GET /api/topics", () => {
@@ -128,5 +136,3 @@ describe("app", () => {
     });
   });
 });
-
-
