@@ -17,7 +17,7 @@ describe("app", () => {
     // > I think this test relies on branch 5 to work (which needs reviewing / merging)
     // > I will add back in once that's done
     // ----------
-    // it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
+    // it.only("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
     //   return request(app)
     //     .get("/api/arty-gulls")
     //     .expect(404)

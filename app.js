@@ -15,6 +15,7 @@ app.get("/api", testConnection);
 
 app.get("/api/topics", getTopics);
 
+//4
 app.get("/api/articles", getArticles);
 
 //6

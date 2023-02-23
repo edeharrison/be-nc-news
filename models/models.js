@@ -17,7 +17,7 @@ exports.fetchArticles = () => {
   return db
     .query(
       `
-  SELECT 
+      SELECT 
       articles.author, 
       articles.title, 
       articles.article_id, 
@@ -35,17 +35,14 @@ exports.fetchArticles = () => {
   `
     )
     .then((result) => {
+      console.log(result)
       return result.rows;
     });
 };
 
 // 6
 exports.fetchCommentsById = (article_id) => {
-  // articles/10000/comments - article_id doesn't exist - throw 404
-  // if (article_id === undefined) {
-  //   return Promise.reject("no article or associated comments here");
-  // }
-  //
+  // START - articles/10000/comments - article_id doesn't exist - throw 404
   return db
     .query(
       `
@@ -57,8 +54,13 @@ exports.fetchCommentsById = (article_id) => {
     )
     .then((result) => {
       if (result.rows.length === 0) {
-        return Promise.reject({ message: "no article or associated comments here" , status: 404});
+        return Promise.reject({
+          message: "no article or associated comments here",
+          status: 404,
+        });
+        // END - articles/10000/comments - article_id doesn't exist - throw 404
       } else {
+        // happy path
         let queryString = `
         SELECT comment_id, votes, created_at, author, body, article_id 
         FROM comments
