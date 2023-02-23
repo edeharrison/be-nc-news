@@ -15,6 +15,7 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles", getArticles);
 
+//6
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
 app.all('/*', res => {

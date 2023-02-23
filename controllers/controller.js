@@ -24,6 +24,7 @@ exports.getArticles = (req, res, next) => {
     })
 }
 
+//6
 exports.getCommentsByArticleId = (req, res, next) => {
     const { article_id } = req.params
     fetchCommentsById(article_id)

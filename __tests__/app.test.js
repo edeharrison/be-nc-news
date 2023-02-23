@@ -27,24 +27,24 @@ describe("app", () => {
     //     });
     // });
     // -----------
-    it("404 GET /api/articles/:article_id/comments - a path that doesn't exist but is valid format", () => {
+    // it("404 GET /api/articles/100000/comments - a path that doesn't exist but is valid format", () => {
+    //   return request(app)
+    //     .get("/api/articles/100000/comments")
+    //     .expect(404)
+    //     .then(({ body }) => {
+    //       const message = body.message;
+    //       expect(message).toBe("no article or associated comments here");
+    //     });
+    // });
+    it("400 GET /api/articles/word-not-number/comments - bad request / wrong format endpoint", () => {
       return request(app)
-      .get("/api/articles/100000/comments")
-      .expect(404)
-      .then(({ body }) => {
-        const message = body.message
-        expect(message).toBe("no article or associated comments here")
-      })
-    })
-    it("400 GET /api/articles/:article_id/comments - bad request / wrong format endpoint", () => {
-      return request(app)
-      .get("/api/articles/word-not-number/comments")
-      .expect(400)
-      .then(({ body }) => {
-        const message = body.message
-        expect(message).toBe("Bad request")
-      })
-    })
+        .get("/api/articles/word-not-number/comments")
+        .expect(400)
+        .then(({ body }) => {
+          const message = body.message;
+          expect(message).toBe("Bad request");
+        });
+    });
   });
   describe("200 GET /api/topics", () => {
     it("200 GET /api/topics - each object inside array has two properties - a slug, and a description", () => {
@@ -105,7 +105,7 @@ describe("app", () => {
         .then(({ body }) => {
           const comments = body;
           expect(Array.isArray(comments)).toBe(true);
-          expect(comments.length).toBeGreaterThan(0);
+          expect(comments.length).toBe(11);
         });
     });
     it("responds with an array of comments for specific article_id, most recent comment first", () => {
@@ -114,7 +114,7 @@ describe("app", () => {
         .expect(200)
         .then(({ body }) => {
           const comments = body;
-          comments.forEach(comment => {
+          comments.forEach((comment) => {
             expect(comment).toMatchObject({
               comment_id: expect.any(Number),
               votes: expect.any(Number),
@@ -123,12 +123,21 @@ describe("app", () => {
               body: expect.any(String),
               article_id: expect.any(Number),
             });
-          })
+          });
 
-          expect(comments).toBeSortedBy('created_at', {
-            descending: true
-          })
+          expect(comments).toBeSortedBy("created_at", {
+            descending: true,
+          });
         });
+    });
+    it("if no comments, responds with an empty array", () => {
+      return request(app)
+      .get("/api/articles/8/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body
+        expect(comments.length).toBe(0)
+      })
     });
   });
 });

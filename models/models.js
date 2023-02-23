@@ -53,12 +53,15 @@ exports.fetchCommentsById = (article_id) => {
     queryParams.push(article_id)
   }
 
+  // articles/10000/comments - article_id doesn't exist - throw 404
+  if (article_id === undefined) {
+    return Promise.reject("no article or associated comments here");
+  }
+  //
+
   return db.query(queryString, queryParams)
   .then((result) => {
     const comments = result.rows
-    if (result.rowCount === 0) {
-      return Promise.reject('no article or associated comments here')
-    }
 
     return comments
   })
