@@ -124,19 +124,49 @@ exports.insertComment = (newComment, article_id) => {
         return db
           .query(
             `
-            INSERT INTO comments (author, body, article_id)
-            VALUES ($1, $2, $3)
-            RETURNING *
+            SELECT * FROM users
             ;
-            `,
-            [newComment.username, newComment.body, article_id]
+            `
           )
           .then((result) => {
-            return result.rows[0];
+            const users = result.rows;
+
+            const checkUserExists = (name) => {
+              return (
+                users.filter((user) => {
+                  user.username === name;
+                }).length > 0
+              );
+            };
+
+            if (checkUserExists(newComment.username)) {
+              return db
+                .query(
+                  `INSERT INTO comments (author, body, article_id)
+                  VALUES ($1, $2, $3)
+                  RETURNING *
+                  ;
+                  `,
+                  [newComment.username, newComment.body, article_id]
+                )
+                .then((result) => {
+                  return result.rows[0];
+                });
+            }
           });
-      } else {
-        return Promise.reject({message: 'That article does not exist', status: 404})
+
       }
+
+      // Tomorrow's tasks
+      // : Pass 404 - 'That user does not exist'
+      // : Pass 404 - 'That article does not exist'
+      
+      // else {
+      //   return Promise.reject({
+      //     message: "That article does not exist",
+      //     status: 404,
+      //   });
+      // }
     });
 
   // query to articles
