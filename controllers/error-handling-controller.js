@@ -1,7 +1,17 @@
 exports.customErrors = (err, req, res, next) => {
+
   if (err.status && err.message) {
     res.status(err.status).send({message: `${err.message}`})
   }
+// maybe
+    if(err === 'no article here') {
+        res.status(404).send({ message: "Path not found" });
+    } else {
+        next(err)
+    }
+// maybe end
+}
+
 
   // update this model, then compile this into above if block
   if (err === "no articles here") {
@@ -23,3 +33,4 @@ exports.error500 = (err, req, res, next) => {
     console.log(err)
     res.status(500).send({ message: 'Internal Server Error :(' })
 }
+

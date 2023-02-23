@@ -46,6 +46,24 @@ describe("app", () => {
           expect(message).toBe("Bad request");
         });
     });
+    it("404 GET /api/articles/100000 - a path that doesn't exist but is valid format", () => {
+      return request(app)
+        .get("/api/articles/100000")
+        .expect(404)
+        .then(({ body }) => {
+          const message = body.message;
+          expect(message).toBe("Path not found");
+        });
+    });
+    it("400 GET /api/articles/word-not-number - a bad request / invalid format", () => {
+      return request(app)
+        .get("/api/articles/word-not-number")
+        .expect(400)
+        .then(({ body }) => {
+          const message = body.message;
+          expect(message).toBe("Bad request");
+        });
+    });
   });
   describe("200 GET /api/topics", () => {
     it("200 GET /api/topics - each object inside array has two properties - a slug, and a description", () => {
@@ -139,6 +157,29 @@ describe("app", () => {
         const comments = body
         expect(comments.length).toBe(0)
       })
+    });
+  });
+  describe("/api/articles/:article_id", () => {
+    it("responds with an object", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then((response) => {
+          expect(typeof response.body).toEqual("object");
+        });
+    });
+    it("200 GET /api/articles/:article_id - responds with specific article from articles", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .then(({ body }) => {
+          const article = body;
+          expect(article.author).toBe('butter_bridge')
+          expect(article.title).toBe("Living in the shadow of a great man");
+          expect(article.article_id).toBe(1)
+          expect(article.topic).toBe("mitch");
+          expect(article.votes).toBe(100);
+          expect(article.article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')          
+        });
     });
   });
 });

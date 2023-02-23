@@ -35,10 +35,29 @@ exports.fetchArticles = () => {
   `
     )
     .then((result) => {
-      console.log(result)
       return result.rows;
     });
 };
+
+//5
+exports.fetchArticleById = (article_id) => {
+  let queryString = `SELECT * FROM articles`;
+  const queryParams = [];
+
+  if (article_id !== undefined) {
+    queryString += ' WHERE article_id = $1';
+    queryParams.push(article_id);
+  }
+
+  return db.query(queryString, queryParams).then((result) => {
+    const article = result.rows
+    if (result.rowCount === 0) {
+      return Promise.reject('no article here')
+    }
+
+    return article[0]
+  });
+})
 
 // 6
 exports.fetchCommentsById = (article_id) => {
@@ -79,4 +98,5 @@ exports.fetchCommentsById = (article_id) => {
         });
       }
     });
+
 };
