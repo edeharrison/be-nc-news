@@ -34,12 +34,12 @@ describe("app", () => {
     });
     it("400 GET /api/articles/word-not-number - a bad request / invalid format", () => {
       return request(app)
-      .get("/api/articles/word-not-number")
-      .expect(400)
-      .then(({ body }) => {
-        const message = body.message
-        expect(message).toBe("Bad request")
-      })
+        .get("/api/articles/word-not-number")
+        .expect(400)
+        .then(({ body }) => {
+          const message = body.message;
+          expect(message).toBe("Bad request");
+        });
     });
   });
   describe("200 GET /api/topics", () => {
@@ -86,25 +86,9 @@ describe("app", () => {
               article_img_url: expect.any(String),
               comment_count: expect.any(Number),
             });
-            // START - Check ORDER BY created_at DESC
-            const createdAtArray = () => {
-              return articles.map((article) => {
-                article = article.created_at;
-                article = article.replace("-", "");
-                article = article.slice(0, 6);
-                return Number(article);
-              });
-            };
-            const sortedCreatedAtArray = articles.map((article) => {
-              article = article.created_at;
-              article = article.replace("-", "");
-              article = article.slice(0, 6);
-              return Number(article);
+            expect(articles).toBeSortedBy("created_at", {
+              descending: true,
             });
-            expect(sortedCreatedAtArray.sort((b, a) => a - b)).toEqual(
-              createdAtArray()
-            );
-            // END - Check ORDER BY created_at DESC
           });
         });
     });
@@ -123,15 +107,12 @@ describe("app", () => {
         .get("/api/articles/1")
         .then(({ body }) => {
           const article = body;
-          expect(article).toMatchObject({
-            author: expect.any(String),
-            title: expect.any(String),
-            article_id: expect.any(Number),
-            topic: expect.any(String),
-            created_at: expect.any(String),
-            votes: expect.any(Number),
-            article_img_url: expect.any(String),
-          });
+          expect(article.author).toBe('butter_bridge')
+          expect(article.title).toBe("Living in the shadow of a great man");
+          expect(article.article_id).toBe(1)
+          expect(article.topic).toBe("mitch");
+          expect(article.votes).toBe(100);
+          expect(article.article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')          
         });
     });
   });
