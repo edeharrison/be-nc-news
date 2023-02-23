@@ -62,7 +62,6 @@ exports.fetchArticleById = (article_id) => {
 
 // 6
 exports.fetchCommentsById = (article_id) => {
-  // START - articles/10000/comments - article_id doesn't exist - throw 404
   return db
     .query(
       `
@@ -78,7 +77,6 @@ exports.fetchCommentsById = (article_id) => {
           message: "no article or associated comments here",
           status: 404,
         });
-        // END - articles/10000/comments - article_id doesn't exist - throw 404
       } else {
         // happy path
         let queryString = `
@@ -106,33 +104,50 @@ exports.insertComment = (newComment, article_id) => {
   const { username, body } = newComment;
 
   if (username === undefined || body === undefined) {
-    return Promise.reject({ message: "incomplete comment", status: 400 });
+    return Promise.reject({
+      message: "No username and/or comment submitted",
+      status: 400,
+    });
   }
+
+  return db
+    .query(
+      `
+    SELECT * FROM articles
+    WHERE article_id = $1
+    ;
+    `,
+      [article_id]
+    )
+    .then((articles) => {
+      if (articles.rows.length !== 0) {
+        return db
+          .query(
+            `
+            INSERT INTO comments (author, body, article_id)
+            VALUES ($1, $2, $3)
+            RETURNING *
+            ;
+            `,
+            [newComment.username, newComment.body, article_id]
+          )
+          .then((result) => {
+            return result.rows[0];
+          });
+      } else {
+        return Promise.reject({message: 'That article does not exist', status: 404})
+      }
+    });
 
   // query to articles
   // if exists >
   // query to users
   // if exists >
-  // insert into comments (existing, code below)
+  // insert into comments (existing code below)
 
   // else
   // if article doesn't exist
   // Promise.reject (article not found)
   // if users doesn't exist
   // Promise.reject (users not found)
-
-  return db
-    .query(
-      `
-    INSERT INTO comments (author, body, article_id)
-    VALUES ($1, $2, $3)
-    RETURNING *
-    ;
-    `,
-      [newComment.username, newComment.body, article_id]
-    )
-    .then((result) => {
-      console.log(result.rows[0]);
-      return result.rows[0];
-    });
 };
