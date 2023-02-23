@@ -14,6 +14,9 @@ afterAll(() => {
 
 describe("app", () => {
   describe("server errors", () => {
+    // > I think this test relies on branch 5 to work (which needs reviewing / merging)
+    // > I will add back in once that's done
+    // ----------
     // it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
     //   return request(app)
     //     .get("/api/arty-gulls")
@@ -23,6 +26,7 @@ describe("app", () => {
     //       expect(message).toBe("no articles here");
     //     });
     // });
+    // -----------
     it("404 GET /api/articles/:article_id/comments - a path that doesn't exist but is valid format", () => {
       return request(app)
       .get("/api/articles/100000/comments")
