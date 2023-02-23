@@ -3,19 +3,19 @@ const db = require("../db/connection.js");
 exports.fetchTopics = () => {
   return db
     .query(
-    `
+      `
     SELECT * FROM topics;
     `
     )
     .then((result) => {
-      return result.rows
-    })
+      return result.rows;
+    });
 };
 
 exports.fetchArticles = () => {
   return db
     .query(
-    `
+      `
     SELECT 
       articles.author, 
       articles.title, 
@@ -34,7 +34,25 @@ exports.fetchArticles = () => {
     `
     )
     .then((result) => {
-      return result.rows
-    })
+      return result.rows;
+    });
 };
 
+exports.fetchArticleById = (article_id) => {
+  let queryString = `SELECT * FROM articles`;
+  const queryParams = [];
+
+  if (article_id !== undefined) {
+    queryString += ' WHERE article_id = $1';
+    queryParams.push(article_id);
+  }
+
+  return db.query(queryString, queryParams).then((result) => {
+    const article = result.rows
+    if (result.rowCount === 0) {
+      return Promise.reject('no article here')
+    }
+
+    return article[0]
+  });
+};
