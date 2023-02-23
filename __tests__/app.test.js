@@ -41,7 +41,7 @@ describe("app", () => {
     });
   });
   describe("200 GET /api/articles", () => {
-    it("returns with an object", () => {
+    it("responds with an object", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -68,11 +68,37 @@ describe("app", () => {
               article_img_url: expect.any(String),
               comment_count: expect.any(Number),
             });
-            expect(articles).toBeSortedBy('created_at', {
-                descending: true
+            expect(articles).toBeSortedBy("created_at", {
+              descending: true,
             });
           });
         });
     });
   });
+  // describe("201 POST /api/articles/:article_id/comments", () => {
+  //   it("201 POST /api/articles/:article_id/comments - responds with an object", () => {
+  //     return request(app)
+  //       .post("/api/articles/1/comments")
+  //       .expect(201)
+  //       .then(({ body }) => {
+  //         const comment = body;
+  //         expect(typeof comment).toBe("object");
+  //       });
+  //   });
+    // it("201 POST /api/articles/:article_id/comments - responds with an object containing newly posted comment", () => {
+    //   const newComment = {
+    //     username: "Billy",
+    //     body: "best article ever",
+    //   };
+    //   return request(app)
+    //     .post("/api/articles/1/comments")
+    //     .send(newComment)
+    //     .expect(201)
+    //     .then(({ body }) => {
+    //       const comment = body;
+    //       expect(comment.username).toBe("Billy");
+    //       expect(comment.body).toBe("best article ever");
+    //     });
+    // });
+  // });
 });

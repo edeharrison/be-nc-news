@@ -38,3 +38,17 @@ exports.fetchArticles = () => {
     })
 };
 
+exports.insertComment = (newComment) => {
+  return db.query(
+    `
+    INSERT INTO comments (username, body)
+    VALUES ($1, $2)
+    RETURNING *
+    ;
+    `,
+    [newComment.username, newComment.body]
+  )
+  .then((result) => {
+    return result
+  })
+}

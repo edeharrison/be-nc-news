@@ -1,4 +1,4 @@
-const { fetchTopics, fetchArticles } = require("../models/models.js")
+const { fetchTopics, fetchArticles, insertComment } = require("../models/models.js")
 
 exports.testConnection = (req, res, next) => {
     res.status(200).send({ message: 'all ok' })
@@ -18,6 +18,17 @@ exports.getArticles = (req, res, next) => {
     fetchArticles()
     .then((articles) => {
         res.status(200).send(articles)
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+exports.addComment = (req, res, next) => {
+    const newComment = req.body
+    insertComment(newComment)
+    .then((comment) => {
+        res.status(201).send(comment)
     })
     .catch((err) => {
         next(err)
