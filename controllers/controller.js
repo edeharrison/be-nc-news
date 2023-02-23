@@ -1,9 +1,17 @@
-const { fetchTopics, fetchArticles, insertComment } = require("../models/models.js")
+const { 
+    fetchTopics, 
+    fetchArticles,
+    fetchArticleById, 
+    fetchCommentsById,
+    insertComment 
+} = require("../models/models.js")
 
-exports.testConnection = (req, res, next) => {
-    res.status(200).send({ message: 'all ok' })
-}
+// shouldn't have written this yet (wasn't on a ticket)
+// exports.testConnection = (req, res, next) => {
+//     res.status(200).send({ message: 'all ok' })
+// } 
 
+//3
 exports.getTopics = (req, res, next) => {
     fetchTopics()
     .then((topics) => {
@@ -14,6 +22,7 @@ exports.getTopics = (req, res, next) => {
     })
 }
 
+//4
 exports.getArticles = (req, res, next) => {
     fetchArticles()
     .then((articles) => {
@@ -24,6 +33,31 @@ exports.getArticles = (req, res, next) => {
     })
 }
 
+//5
+exports.getArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchArticleById(article_id)
+    .then((article) => {
+      res.status(200).send(article);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+//6
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchCommentsById(article_id)
+    .then((comments) => {
+      res.status(200).send(comments);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+//7
 exports.addComment = (req, res, next) => {
     const { article_id } = req.params
     const newComment = req.body
