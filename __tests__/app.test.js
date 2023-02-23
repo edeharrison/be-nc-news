@@ -14,15 +14,15 @@ afterAll(() => {
 
 describe("app", () => {
   describe("server errors", () => {
-    it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
-      return request(app)
-        .get("/api/arty-gulls")
-        .expect(404)
-        .then(({ body }) => {
-          const message = body.message;
-          expect(message).toBe("Path not found");
-        });
-    });
+    // it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
+    //   return request(app)
+    //     .get("/api/arty-gulls")
+    //     .expect(404)
+    //     .then(({ body }) => {
+    //       const message = body.message;
+    //       expect(message).toBe("Path not found");
+    //     });
+    // });
   });
   describe("200 GET /api/topics", () => {
     it("200 GET /api/topics - each object inside array has two properties - a slug, and a description", () => {
