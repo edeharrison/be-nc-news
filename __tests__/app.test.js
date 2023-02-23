@@ -77,8 +77,13 @@ describe("app", () => {
   });
   // describe("201 POST /api/articles/:article_id/comments", () => {
   //   it("201 POST /api/articles/:article_id/comments - responds with an object", () => {
+  //     const newComment = {
+  //       // username: "Billy",
+  //       body: "best article ever",
+  //     };
   //     return request(app)
   //       .post("/api/articles/1/comments")
+  //       .send(newComment)
   //       .expect(201)
   //       .then(({ body }) => {
   //         const comment = body;
@@ -87,7 +92,7 @@ describe("app", () => {
   //   });
     // it("201 POST /api/articles/:article_id/comments - responds with an object containing newly posted comment", () => {
     //   const newComment = {
-    //     username: "Billy",
+    //     // username: "Billy",
     //     body: "best article ever",
     //   };
     //   return request(app)
@@ -96,7 +101,7 @@ describe("app", () => {
     //     .expect(201)
     //     .then(({ body }) => {
     //       const comment = body;
-    //       expect(comment.username).toBe("Billy");
+    //       // expect(comment.username).toBe("Billy");
     //       expect(comment.body).toBe("best article ever");
     //     });
     // });

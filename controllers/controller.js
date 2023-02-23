@@ -27,6 +27,7 @@ exports.getArticles = (req, res, next) => {
 exports.addComment = (req, res, next) => {
     const newComment = req.body
     insertComment(newComment)
+    console.log(newComment)
     .then((comment) => {
         res.status(201).send(comment)
     })

@@ -41,12 +41,12 @@ exports.fetchArticles = () => {
 exports.insertComment = (newComment) => {
   return db.query(
     `
-    INSERT INTO comments (username, body)
-    VALUES ($1, $2)
+    INSERT INTO comments (body, votes, author AS username, article_id, created_at)
+    VALUES ($1)
     RETURNING *
     ;
     `,
-    [newComment.username, newComment.body]
+    [newComment.body, newComment.votes, ]
   )
   .then((result) => {
     return result
