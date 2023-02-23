@@ -57,7 +57,7 @@ exports.fetchArticleById = (article_id) => {
 
     return article[0]
   });
-})
+}
 
 // 6
 exports.fetchCommentsById = (article_id) => {

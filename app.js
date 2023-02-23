@@ -10,8 +10,8 @@ const {
   testConnection,
   getTopics,
   getArticles,
-  getCommentsByArticleId,
   getArticleById,
+  getCommentsByArticleId,
 } = require("./controllers/controller.js");
 
 app.get("/api", testConnection);
@@ -21,6 +21,8 @@ app.get("/api/topics", getTopics);
 //4
 app.get("/api/articles", getArticles);
 
+//5
+app.get("/api/articles/:article_id", getArticleById)
 
 //6
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
@@ -31,15 +33,6 @@ app.all('/*', res => {
 
 app.use(customErrors)
 app.use(PSQLErrors)
-
-app.get("/api/articles/:article_id", getArticleById);
-
-app.all("/*", (req, res) => {
-  res.status(404).send({ message: "Path not found" });
-});
-
-app.use(customErrors);
-app.use(PSQLErrors);
 app.use(error500);
 
 module.exports = app;
