@@ -14,8 +14,9 @@ exports.fetchTopics = () => {
 
 // 4
 exports.fetchArticles = () => {
-  return db.query(
-  `
+  return db
+    .query(
+      `
   SELECT 
       articles.author, 
       articles.title, 
@@ -32,37 +33,48 @@ exports.fetchArticles = () => {
       ORDER BY created_at DESC
       ;
   `
-  )
-  .then((result) => {
-
-    return result.rows;
-  });
+    )
+    .then((result) => {
+      return result.rows;
+    });
 };
 
 // 6
 exports.fetchCommentsById = (article_id) => {
-  let queryString = 
-    `
-    SELECT comment_id, votes, created_at, author, body, article_id 
-    FROM comments
-    `
-  const queryParams = []
-
-  if (article_id !== undefined) {
-    queryString += ` WHERE article_id = $1 ORDER BY created_at DESC;`
-    queryParams.push(article_id)
-  }
-
   // articles/10000/comments - article_id doesn't exist - throw 404
-  if (article_id === undefined) {
-    return Promise.reject("no article or associated comments here");
-  }
+  // if (article_id === undefined) {
+  //   return Promise.reject("no article or associated comments here");
+  // }
   //
+  return db
+    .query(
+      `
+    SELECT * FROM articles
+    WHERE article_id = $1
+    ;
+    `,
+      [article_id]
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({ message: "no article or associated comments here" , status: 404});
+      } else {
+        let queryString = `
+        SELECT comment_id, votes, created_at, author, body, article_id 
+        FROM comments
+        `;
+        const queryParams = [];
 
-  return db.query(queryString, queryParams)
-  .then((result) => {
-    const comments = result.rows
+        if (article_id !== undefined) {
+          queryString += ` WHERE article_id = $1 ORDER BY created_at DESC;`;
+          queryParams.push(article_id);
+        }
 
-    return comments
-  })
+        return db.query(queryString, queryParams).then((result) => {
+          const comments = result.rows;
+
+          return comments;
+        });
+      }
+    });
 };
