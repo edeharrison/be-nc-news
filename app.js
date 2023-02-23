@@ -1,7 +1,6 @@
 const express = require("express");
 const { error500 } = require("./controllers/error-handling-controller.js");
 const app = express();
-//think need express json now
 app.use(express.json())
 
 const {

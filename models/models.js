@@ -38,17 +38,36 @@ exports.fetchArticles = () => {
     })
 };
 
-exports.insertComment = (newComment) => {
+exports.insertComment = (newComment, article_id) => {
+  const { username, body } = newComment
+
+  if (username === undefined || body === undefined) {
+    return Promise.reject({message: 'incomplete comment', status: 400})
+  }
+
+  // query to articles 
+  // if exists > 
+  // query to users
+  // if exists >
+    // insert into comments (existing, code below)
+
+  // else
+  // if article doesn't exist
+    // Promise.reject (article not found)
+  // if users doesn't exist
+    // Promise.reject (users not found)
+
   return db.query(
     `
-    INSERT INTO comments (body, votes, author AS username, article_id, created_at)
-    VALUES ($1)
+    INSERT INTO comments (author, body, article_id)
+    VALUES ($1, $2, $3)
     RETURNING *
     ;
     `,
-    [newComment.body, newComment.votes, ]
+    [newComment.username, newComment.body, article_id]
   )
   .then((result) => {
-    return result
+    console.log(result.rows[0])
+    return result.rows[0]
   })
 }
