@@ -161,7 +161,7 @@ exports.insertComment = (newComment, article_id) => {
 };
 
 //8
-exports.updateVote = (article_id, newVote) => {
+exports.updateArticleVote = (article_id, newVote) => {
   const { inc_vote } = newVote
 
   return db.query(
