@@ -6,11 +6,6 @@ const {
     insertComment 
 } = require("../models/models.js")
 
-// shouldn't have written this yet (wasn't on a ticket)
-// exports.testConnection = (req, res, next) => {
-//     res.status(200).send({ message: 'all ok' })
-// } 
-
 //3
 exports.getTopics = (req, res, next) => {
     fetchTopics()

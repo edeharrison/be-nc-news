@@ -14,20 +14,17 @@ afterAll(() => {
 
 describe("App", () => {
   describe("Server errors", () => {
-    // > I think this test relies on branch 5 to work (which needs reviewing / merging)
-    // > I will add back in once that's done
-    // ----------
-    // it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
-    //   return request(app)
-    //     .get("/api/arty-gulls")
-    //     .expect(404)
-    //     .then(({ body }) => {
-    //       const message = body.message;
-    //       expect(message).toBe("Path not found");
-    //     });
-    // });
-    // -----------
-    // });
+    
+    // 4
+    it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
+      return request(app)
+        .get("/api/arty-gulls")
+        .expect(404)
+        .then(({ body }) => {
+          const message = body.message;
+          expect(message).toBe("Path not found");
+        });
+    });
 
     //5
     describe("GET /api/articles/:article_id", () => {

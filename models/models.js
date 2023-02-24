@@ -78,7 +78,6 @@ exports.fetchCommentsById = (article_id) => {
           status: 404,
         });
       } else {
-        // happy path
         let queryString = `
         SELECT comment_id, votes, created_at, author, body, article_id 
         FROM comments
