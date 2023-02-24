@@ -127,7 +127,7 @@ exports.insertComment = (newComment, article_id) => {
           WHERE username = $1
           ;
           `,
-            [newComment.username]
+            [username]
           )
           .then((users) => {
             if (users.rows.length !== 0) {
@@ -138,8 +138,7 @@ exports.insertComment = (newComment, article_id) => {
                   RETURNING *
                   ;
                   `,
-                  // can just access username, body
-                  [newComment.username, newComment.body, article_id]
+                  [username, body, article_id]
                 )
                 .then((comment) => {
                   return comment.rows[0];
@@ -162,21 +161,32 @@ exports.insertComment = (newComment, article_id) => {
 
 //8
 exports.updateArticleVote = (article_id, newVote) => {
-  const { inc_vote } = newVote
+  const { inc_vote } = newVote;
 
-  return db.query(
-    `
-    UPDATE articles
-    SET votes = $1 + votes
-    WHERE article_id = $2
-    RETURNING *
-    ;
-    `,
-    [inc_vote, article_id]
-  )
-  .then((result) => {
-    return result.rows[0]
-  })
+  if (inc_vote === undefined) {
+    return Promise.reject({message: 'No vote submitted', status: 400})
+  }
 
-
-}
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          message: "That article does not exist",
+          status: 404,
+        });
+      } else {
+        return db
+          .query(
+            `UPDATE articles 
+            SET votes = $1 + votes
+            WHERE article_id = $2
+            RETURNING * ;`,
+            [inc_vote, article_id]
+          )
+          .then((result) => {
+            return result.rows[0];
+          });
+      }
+    });
+};

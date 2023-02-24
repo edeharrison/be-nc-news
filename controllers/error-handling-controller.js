@@ -17,7 +17,6 @@ exports.PSQLErrors = (err, req, res, next) => {
 
 //
 exports.error500 = (err, req, res, next) => {
-  // handy (and allowed) to include following console.log
   console.log(err);
   res.status(500).send({ message: "Internal Server Error :(" });
 };
