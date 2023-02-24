@@ -124,22 +124,14 @@ exports.insertComment = (newComment, article_id) => {
         return db
           .query(
             `
-            SELECT * FROM users
-            ;
-            `
+          SELECT * FROM users
+          WHERE username = $1
+          ;
+          `,
+            [newComment.username]
           )
-          .then((result) => {
-            const users = result.rows;
-
-            const checkUserExists = (name) => {
-              return (
-                users.filter((user) => {
-                  user.username === name;
-                }).length > 0
-              );
-            };
-
-            if (checkUserExists(newComment.username)) {
+          .then((users) => {
+            if (users.rows.length !== 0) {
               return db
                 .query(
                   `INSERT INTO comments (author, body, article_id)
@@ -149,35 +141,21 @@ exports.insertComment = (newComment, article_id) => {
                   `,
                   [newComment.username, newComment.body, article_id]
                 )
-                .then((result) => {
-                  return result.rows[0];
+                .then((comment) => {
+                  return comment.rows[0];
                 });
+            } else {
+              return Promise.reject({
+                message: "That user does not exist",
+                status: 404,
+              });
             }
           });
-
+      } else {
+        return Promise.reject({
+          message: "That article does not exist",
+          status: 404,
+        });
       }
-
-      // Tomorrow's tasks
-      // : Pass 404 - 'That user does not exist'
-      // : Pass 404 - 'That article does not exist'
-      
-      // else {
-      //   return Promise.reject({
-      //     message: "That article does not exist",
-      //     status: 404,
-      //   });
-      // }
     });
-
-  // query to articles
-  // if exists >
-  // query to users
-  // if exists >
-  // insert into comments (existing code below)
-
-  // else
-  // if article doesn't exist
-  // Promise.reject (article not found)
-  // if users doesn't exist
-  // Promise.reject (users not found)
 };

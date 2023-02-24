@@ -245,8 +245,8 @@ describe("App", () => {
     });
 
     //7
-    describe("201 POST /api/articles/:article_id/comments", () => {
-      it.only("201 POST /api/articles/1/comments - responds with an object", () => {
+    describe("POST /api/articles/:article_id/comments", () => {
+      it("/api/articles/1/comments - 201 - responds with an object", () => {
         const newComment = {
           username: "butter_bridge",
           body: "best article ever",
@@ -260,21 +260,21 @@ describe("App", () => {
             expect(typeof comment).toBe("object");
           });
       });
-      // it("201 POST /api/articles/:article_id/comments - responds with an object containing newly posted comment", () => {
-      //   const newComment = {
-      //     username: "butter_bridge",
-      //     body: "best article ever",
-      //   };
-      //   return request(app)
-      //     .post("/api/articles/1/comments")
-      //     .send(newComment)
-      //     .expect(201)
-      //     .then(({ body }) => {
-      //       const comment = body;
-      //       expect(comment.username).toBe("Billy");
-      //       expect(comment.body).toBe("best article ever");
-      //     });
-      // });
+      it("/api/articles/:article_id/comments - 201 - responds with an object containing newly posted comment", () => {
+        const newComment = {
+          username: "butter_bridge",
+          body: "best article ever",
+        };
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send(newComment)
+          .expect(201)
+          .then(({ body }) => {
+            const comment = body;
+            expect(comment.author).toBe("butter_bridge");
+            expect(comment.body).toBe("best article ever");
+          });
+      });
     });
   });
 });
