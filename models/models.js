@@ -78,7 +78,6 @@ exports.fetchCommentsById = (article_id) => {
           status: 404,
         });
       } else {
-        // happy path
         let queryString = `
         SELECT comment_id, votes, created_at, author, body, article_id 
         FROM comments
@@ -139,6 +138,7 @@ exports.insertComment = (newComment, article_id) => {
                   RETURNING *
                   ;
                   `,
+                  // can just access username, body
                   [newComment.username, newComment.body, article_id]
                 )
                 .then((comment) => {
@@ -159,3 +159,24 @@ exports.insertComment = (newComment, article_id) => {
       }
     });
 };
+
+//8
+exports.updateVote = (article_id, newVote) => {
+  const { inc_vote } = newVote
+
+  return db.query(
+    `
+    UPDATE articles
+    SET votes = $1 + votes
+    WHERE article_id = $2
+    RETURNING *
+    ;
+    `,
+    [inc_vote, article_id]
+  )
+  .then((result) => {
+    return result.rows[0]
+  })
+
+
+}

@@ -1,37 +1,33 @@
-const { 
-    fetchTopics, 
-    fetchArticles,
-    fetchArticleById, 
-    fetchCommentsById,
-    insertComment 
-} = require("../models/models.js")
-
-// shouldn't have written this yet (wasn't on a ticket)
-// exports.testConnection = (req, res, next) => {
-//     res.status(200).send({ message: 'all ok' })
-// } 
+const {
+  fetchTopics,
+  fetchArticles,
+  fetchArticleById,
+  fetchCommentsById,
+  insertComment,
+  updateVote,
+} = require("../models/models.js");
 
 //3
 exports.getTopics = (req, res, next) => {
-    fetchTopics()
+  fetchTopics()
     .then((topics) => {
-        res.status(200).send(topics)
+      res.status(200).send(topics);
     })
     .catch((err) => {
-        next(err)
-    })
-}
+      next(err);
+    });
+};
 
 //4
 exports.getArticles = (req, res, next) => {
-    fetchArticles()
+  fetchArticles()
     .then((articles) => {
-        res.status(200).send(articles)
+      res.status(200).send(articles);
     })
     .catch((err) => {
-        next(err)
-    })
-}
+      next(err);
+    });
+};
 
 //5
 exports.getArticleById = (req, res, next) => {
@@ -59,13 +55,26 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
 //7
 exports.addComment = (req, res, next) => {
-    const { article_id } = req.params
-    const newComment = req.body
-    insertComment(newComment, article_id)
+  const { article_id } = req.params;
+  const newComment = req.body;
+  insertComment(newComment, article_id)
     .then((comment) => {
-        res.status(201).send(comment)
+      res.status(201).send(comment);
     })
     .catch((err) => {
-        next(err)
+      next(err);
+    });
+};
+
+//8
+exports.patchVote = (req, res, next) => {
+  const { article_id } = req.params;
+  const newVote = req.body;
+  updateVote(article_id, newVote)
+    .then((result) => {
+      res.status(200).send(result);
     })
-}
+    .catch((err) => {
+      next(err);
+    });
+};

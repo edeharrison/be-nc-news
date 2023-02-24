@@ -14,20 +14,19 @@ afterAll(() => {
 
 describe("App", () => {
   describe("Server errors", () => {
-    // > I think this test relies on branch 5 to work (which needs reviewing / merging)
-    // > I will add back in once that's done
-    // ----------
-    // it("404 GET /api/articles - a path that doesn't exist but is valid format", () => {
-    //   return request(app)
-    //     .get("/api/arty-gulls")
-    //     .expect(404)
-    //     .then(({ body }) => {
-    //       const message = body.message;
-    //       expect(message).toBe("Path not found");
-    //     });
-    // });
-    // -----------
-    // });
+
+    //4
+    describe("GET /api/articles", () => {
+      it("/api/articles - 404 Error - 'Path not found'", () => {
+        return request(app)
+          .get("/api/arty-gulls")
+          .expect(404)
+          .then(({ body }) => {
+            const message = body.message;
+            expect(message).toBe("Path not found");
+          });
+      });
+    })
 
     //5
     describe("GET /api/articles/:article_id", () => {
@@ -276,5 +275,32 @@ describe("App", () => {
           });
       });
     });
+
+    //8
+    describe("PATCH /api/articles/:article_id", () => {
+      it("/api/articles/1 - 200 - successfully updates vote on article and returns that article object", () => {
+        const newVote = {
+          inc_vote: 1
+        }
+        return request(app)
+        .patch("/api/articles/1")
+        .send(newVote)
+        .expect(200)
+        .then(({ body }) => {
+          const article = body
+          expect(typeof article).toBe("object"),
+            expect(article.article_id).toBe(1),
+            expect(article.title).toBe("Living in the shadow of a great man"),
+            expect(article.topic).toBe("mitch"),
+            expect(article.author).toBe("butter_bridge"),
+            expect(article.body).toBe("I find this existence challenging"),
+            expect(article.created_at).toBe("2020-07-09T20:11:00.000Z"),
+            expect(article.votes).toBe(101),
+            expect(article.article_img_url).toBe(
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+            );
+        })
+      })
+    })
   });
 });
