@@ -3,11 +3,7 @@ const db = require("../db/connection.js");
 //3
 exports.fetchTopics = () => {
   return db
-    .query(
-      `
-    SELECT * FROM topics;
-    `
-    )
+    .query(`SELECT * FROM topics;`)
     .then((result) => {
       return result.rows;
     });
@@ -158,3 +154,12 @@ exports.insertComment = (newComment, article_id) => {
       }
     });
 };
+
+//9
+exports.fetchUsers = () => {
+  return db
+    .query(`SELECT * FROM users`)
+    .then((users) => {
+      return users.rows
+    })
+}

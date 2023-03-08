@@ -3,7 +3,8 @@ const {
     fetchArticles,
     fetchArticleById, 
     fetchCommentsById,
-    insertComment 
+    insertComment,
+    fetchUsers
 } = require("../models/models.js")
 
 //3
@@ -59,6 +60,17 @@ exports.addComment = (req, res, next) => {
     insertComment(newComment, article_id)
     .then((comment) => {
         res.status(201).send(comment)
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+//9
+exports.getUsers = (req, res, next) => {
+    fetchUsers()
+    .then((users) => {
+        res.status(200).send(users)
     })
     .catch((err) => {
         next(err)
