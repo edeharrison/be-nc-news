@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require('cors');
+
 const {
   customErrors,
   PSQLErrors,
@@ -15,6 +17,8 @@ const {
   addComment,
   getUsers
 } = require("./controllers/controller.js");
+
+app.use(cors())
 
 //3
 app.get("/api/topics", getTopics);
