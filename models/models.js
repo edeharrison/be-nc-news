@@ -60,12 +60,7 @@ exports.fetchArticleById = (article_id) => {
 exports.fetchCommentsById = (article_id) => {
   return db
     .query(
-      `
-    SELECT * FROM articles
-    WHERE article_id = $1
-    ;
-    `,
-      [article_id]
+      `SELECT * FROM articles WHERE article_id = $1;`, [article_id]
     )
     .then((result) => {
       if (result.rows.length === 0) {
@@ -107,23 +102,13 @@ exports.insertComment = (newComment, article_id) => {
 
   return db
     .query(
-      `
-    SELECT * FROM articles
-    WHERE article_id = $1
-    ;
-    `,
-      [article_id]
+      `SELECT * FROM articles WHERE article_id = $1;`, [article_id]
     )
     .then((articles) => {
       if (articles.rows.length !== 0) {
         return db
           .query(
-            `
-          SELECT * FROM users
-          WHERE username = $1
-          ;
-          `,
-            [newComment.username]
+            `SELECT * FROM users WHERE username = $1;`, [username]
           )
           .then((users) => {
             if (users.rows.length !== 0) {
@@ -132,9 +117,7 @@ exports.insertComment = (newComment, article_id) => {
                   `INSERT INTO comments (author, body, article_id)
                   VALUES ($1, $2, $3)
                   RETURNING *
-                  ;
-                  `,
-                  [newComment.username, newComment.body, article_id]
+                  ;`, [username, body, article_id]
                 )
                 .then((comment) => {
                   return comment.rows[0];
@@ -155,6 +138,39 @@ exports.insertComment = (newComment, article_id) => {
     });
 };
 
+
+//8
+exports.updateArticleVote = (article_id, newVote) => {
+  const { inc_vote } = newVote;
+
+  if (inc_vote === undefined) {
+    return Promise.reject({message: 'No vote submitted', status: 400})
+  }
+
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          message: "That article does not exist",
+          status: 404,
+        });
+      } else {
+        return db
+          .query(
+            `UPDATE articles 
+            SET votes = $1 + votes
+            WHERE article_id = $2
+            RETURNING * ;`,
+            [inc_vote, article_id]
+          )
+          .then((result) => {
+            return result.rows[0];
+          });
+      }
+    });
+};
+
 //9
 exports.fetchUsers = () => {
   return db
@@ -163,3 +179,4 @@ exports.fetchUsers = () => {
       return users.rows
     })
 }
+

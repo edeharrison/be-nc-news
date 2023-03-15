@@ -1,33 +1,35 @@
-const { 
-    fetchTopics, 
-    fetchArticles,
-    fetchArticleById, 
-    fetchCommentsById,
-    insertComment,
-    fetchUsers
+
+const {
+  fetchTopics,
+  fetchArticles,
+  fetchArticleById,
+  fetchCommentsById,
+  insertComment,
+  updateArticleVote,
+  fetchUsers
 } = require("../models/models.js")
 
 //3
 exports.getTopics = (req, res, next) => {
-    fetchTopics()
+  fetchTopics()
     .then((topics) => {
-        res.status(200).send(topics)
+      res.status(200).send(topics);
     })
     .catch((err) => {
-        next(err)
-    })
-}
+      next(err);
+    });
+};
 
 //4
 exports.getArticles = (req, res, next) => {
-    fetchArticles()
+  fetchArticles()
     .then((articles) => {
-        res.status(200).send(articles)
+      res.status(200).send(articles);
     })
     .catch((err) => {
-        next(err)
-    })
-}
+      next(err);
+    });
+};
 
 //5
 exports.getArticleById = (req, res, next) => {
@@ -54,16 +56,31 @@ exports.getCommentsByArticleId = (req, res, next) => {
 };
 
 //7
-exports.addComment = (req, res, next) => {
-    const { article_id } = req.params
-    const newComment = req.body
-    insertComment(newComment, article_id)
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const newComment = req.body;
+  insertComment(newComment, article_id)
     .then((comment) => {
-        res.status(201).send(comment)
+      res.status(201).send(comment);
     })
     .catch((err) => {
-        next(err)
+      next(err);
+    });
+};
+
+//8
+exports.patchArticleVote = (req, res, next) => {
+  const { article_id } = req.params;
+  const newVote = req.body;
+  updateArticleVote(article_id, newVote)
+    .then((result) => {
+      res.status(200).send(result);
     })
+
+    .catch((err) => {
+      next(err);
+    });
+  };
 }
 
 //9
@@ -76,3 +93,4 @@ exports.getUsers = (req, res, next) => {
         next(err)
     })
 }
+
