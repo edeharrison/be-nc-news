@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require('cors');
+
 const {
   customErrors,
   PSQLErrors,
@@ -13,8 +15,12 @@ const {
   getArticleById,
   getCommentsByArticleId,
   postComment,
-  patchArticleVote
+  patchArticleVote,
+  addComment,
+  getUsers
 } = require("./controllers/controller.js");
+
+app.use(cors())
 
 //3
 app.get("/api/topics", getTopics);
@@ -33,6 +39,11 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 //8
 app.patch("/api/articles/:article_id", patchArticleVote);
+app.post("/api/articles/:article_id/comments", addComment)
+
+//9
+app.get("/api/users", getUsers)
+
 
 app.all("/*", (req, res) => {
   res.status(404).send({ message: "Path not found" });

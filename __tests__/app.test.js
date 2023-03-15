@@ -14,6 +14,7 @@ afterAll(() => {
 
 describe("App", () => {
   describe("Server errors", () => {
+
     //4
     describe("GET /api/articles", () => {
       it("/api/articles - 404 Error - 'Path not found'", () => {
@@ -143,7 +144,22 @@ describe("App", () => {
           })
       });
     });
+
+    //9
+    describe("GET /api/users", () => {
+      it("/api/uzers - 404 Error = 'Path not found'", () => {
+        return request(app)
+        .get("/api/uzers")
+        .expect(404)
+        .then(({body}) => {
+          const message = body.message
+          expect(message).toBe('Path not found')
+        })
+      })
+    })
   });
+
+  // END - Server errors
 
   describe("Happy path", () => {
     //3
@@ -305,6 +321,7 @@ describe("App", () => {
       });
     });
 
+
     //8
     describe("PATCH /api/articles/:article_id", () => {
       it("/api/articles/1 - 200 - successfully updates vote on article and returns that article object", () => {
@@ -331,5 +348,33 @@ describe("App", () => {
           });
       });
     });
+
+    //9
+    describe("GET /api/users", () => {
+      it("200 - it responds with an array of users", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(({body}) => {
+            expect(Array.isArray(body)).toBe(true)
+            expect(body.length).toBe(4)
+          })
+      })
+      it("200 - each user object has key of username, name, and avatar_url", () => {
+        return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({body}) => {
+          body.forEach((user) => {
+            expect(user).toMatchObject({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String)
+            })
+          })
+        })
+      })
+    })
+
   });
 });

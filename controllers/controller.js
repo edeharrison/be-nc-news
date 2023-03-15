@@ -1,3 +1,4 @@
+
 const {
   fetchTopics,
   fetchArticles,
@@ -5,7 +6,8 @@ const {
   fetchCommentsById,
   insertComment,
   updateArticleVote,
-} = require("../models/models.js");
+  fetchUsers
+} = require("../models/models.js")
 
 //3
 exports.getTopics = (req, res, next) => {
@@ -74,7 +76,21 @@ exports.patchArticleVote = (req, res, next) => {
     .then((result) => {
       res.status(200).send(result);
     })
+
     .catch((err) => {
       next(err);
     });
-};
+  };
+}
+
+//9
+exports.getUsers = (req, res, next) => {
+    fetchUsers()
+    .then((users) => {
+        res.status(200).send(users)
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
