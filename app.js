@@ -39,7 +39,6 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 //8
 app.patch("/api/articles/:article_id", patchArticleVote);
-app.post("/api/articles/:article_id/comments", addComment)
 
 //9
 app.get("/api/users", getUsers)

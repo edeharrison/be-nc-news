@@ -81,7 +81,7 @@ exports.patchArticleVote = (req, res, next) => {
       next(err);
     });
   };
-}
+
 
 //9
 exports.getUsers = (req, res, next) => {
